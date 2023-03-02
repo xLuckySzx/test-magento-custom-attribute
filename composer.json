@@ -1,0 +1,22 @@
+{
+    "name": "lucky/custom-attribute",
+    "description": "REST API Layer for Magento Newsletter module.",
+    "type": "magento2-module",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "email": "a.damiani@dpstudio.ch",
+            "name": "Angelo Damiani"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Lucky\\CustomAttribute\\": ""
+        }
+    }
+}
