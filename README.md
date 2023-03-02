@@ -54,3 +54,4 @@ Apply database updates by running
 
 
 # test-magento-custom-attribute
+# test-magento-custom-attribute
