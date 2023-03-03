@@ -1,6 +1,6 @@
 <?php
-
-use Magento\Framework\Component\ComponentRegistrar;
-
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Lucky_CustomAttribute', __DIR__);
-
+\Magento\Framework\Component\ComponentRegistrar::register(
+	\Magento\Framework\Component\ComponentRegistrar::MODULE,
+	'Lucky_CustomAttribute',
+	__DIR__
+);
