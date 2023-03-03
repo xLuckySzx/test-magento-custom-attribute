@@ -1,6 +1,6 @@
 <?php
 
-namespace Lucky\NewsletterApi\Setup;
+namespace Lucky\CustomAttribute\Setup;
 
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Customer\Model\Customer;
