@@ -1,55 +1,68 @@
 <?php
-
 namespace Lucky\CustomAttribute\Setup;
 
-use Magento\Eav\Setup\EavSetup;
+
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Eav\Model\Config;
-use Magento\Customer\Model\Customer;
 
-class InstallData implements InstallDataInterface
+class InstallData implements InstallDataInterface 
 {
-	private $eavSetupFactory;
+    /**
+     * @var EavSetupFactory
+     */
+    private $eavSetupFactory;
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $eavConfig;
 
-	public function __construct(EavSetupFactory $eavSetupFactory, Config $eavConfig)
-	{
-		$this->eavSetupFactory = $eavSetupFactory;
-		$this->eavConfig       = $eavConfig;
-	}
+    public function __construct(
+        EavSetupFactory $eavSetupFactory,
+        \Magento\Eav\Model\Config $eavConfig
+    ) {
+        $this->eavSetupFactory = $eavSetupFactory;
+        $this->eavConfig = $eavConfig;
+    }
 
-	public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
-	{
-		$eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
-		$eavSetup->addAttribute(
-			\Magento\Customer\Model\Customer::ENTITY,
-			'selectline_id',
-			[
-				'type'         => 'varchar',
-				'label'        => 'Selectline ID',
-				'input'        => 'text',
-				'required'     => false,
-				'visible'      => true,
-				'user_defined' => true,
-				'position'     => 999,
-				'system'       => false,
-                'is_used_in_grid' => 1,
-                'is_visible_in_grid' => 1,
-                'is_filterable_in_grid' => 1,
-                'is_searchable_in_grid' => 1,
-			]
-		);
-		$sampleAttribute = $this->eavConfig->getAttribute(Customer::ENTITY, 'selectline_id');
+    /**
+     * Installs data for a module
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+        /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
-		// more used_in_forms ['adminhtml_checkout','adminhtml_customer','adminhtml_customer_address','customer_account_edit','customer_address_edit','customer_register_address']
-		$sampleAttribute->setData(
-			'used_in_forms',
-			['adminhtml_customer']
+        $setup->startSetup();
 
-		);
-		$sampleAttribute->save();
-	}
+        $attributeCode = 'selectline_id';
+        $eavSetup->addAttribute(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, 'selectline_id', [
+            'label' => 'SelectLine ID',
+            'required' => false,
+            'user_defined' => 1,
+            'system' => 0,
+            'position' => 100,
+            'input' => 'text'
+        ]);
+
+        $eavSetup->addAttributeToSet(
+            CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+            CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+            null,
+            $attributeCode);
+
+        $amountId = $this->eavConfig->getAttribute(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $attributeCode);
+        $amountId->setData('used_in_forms', [
+            'adminhtml_customer',
+        ]);
+        $amountId->getResource()->save($amountId);
+
+        $setup->endSetup();
+    }
 }
-
