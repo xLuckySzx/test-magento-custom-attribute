@@ -25,19 +25,23 @@ class InstallData implements InstallDataInterface
 		$eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 		$eavSetup->addAttribute(
 			\Magento\Customer\Model\Customer::ENTITY,
-			'sample_attribute',
+			'selectline_id',
 			[
 				'type'         => 'varchar',
-				'label'        => 'Sample Attribute',
+				'label'        => 'Selectline ID',
 				'input'        => 'text',
 				'required'     => false,
 				'visible'      => true,
 				'user_defined' => true,
 				'position'     => 999,
-				'system'       => 0,
+				'system'       => false,
+                'is_used_in_grid' => 1,
+                'is_visible_in_grid' => 1,
+                'is_filterable_in_grid' => 1,
+                'is_searchable_in_grid' => 1,
 			]
 		);
-		$sampleAttribute = $this->eavConfig->getAttribute(Customer::ENTITY, 'sample_attribute');
+		$sampleAttribute = $this->eavConfig->getAttribute(Customer::ENTITY, 'selectline_id');
 
 		// more used_in_forms ['adminhtml_checkout','adminhtml_customer','adminhtml_customer_address','customer_account_edit','customer_address_edit','customer_register_address']
 		$sampleAttribute->setData(
